@@ -34,5 +34,18 @@ public class GameController {
     public void undo(Game game){
 
     }
+    public  void display(Game game){
+        game.displayBoard();
+    }
 
 }
+
+//1. start the game - take the input ,set attributes , validate the atrributes
+//2. while the game is in_process
+    //2.1 Display the board
+    //2.2 make the move , check for the winner , update the state
+// 3.check the state
+    // if game state is success
+    //display the winner and end the game
+    //else if game state is draw
+    //declare the draw

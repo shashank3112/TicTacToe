@@ -15,7 +15,19 @@ public class Client {
         players.add(new HumanPlayer(3, "Aman" , PlayerType.HUMAN , new Symbol('Z')));
         players.add(new HumanPlayer(4, "Shubham" , PlayerType.HUMAN , new Symbol('T')));
 
-        Game g = gc.startGame(5 , players , List.of(new RowWinningStrategy()));
+        Game game = gc.startGame(5 , players , List.of(new RowWinningStrategy()));
+
+        gc.display(game);
+        while(gc.checkState(game).equals(GameState.IN_PROGRESS)){
+            gc.makeMove(game);
+        }
+
+        if(gc.checkState(game).equals(GameState.SUCCESS)){
+            System.out.println(gc.getWinner(game).getName()+"won the game");
+        }
+        else if(gc.checkState(game).equals(GameState.DRAW)){
+            System.out.println("game is draw");
+        }
 
     }
 }

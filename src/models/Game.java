@@ -21,7 +21,7 @@ public class Game {
         players = gamebuilder.players;
         winningStrategies = gamebuilder.winningStrategies;
         winner = null;
-        gameState = GameState.IN_PRCOESS;
+        gameState = GameState.IN_PROGRESS;
         nextPlayerIdx = 0;
         moves = new ArrayList<>();
     }
@@ -80,7 +80,9 @@ public class Game {
     public void setWinningStrategies(List<WinningStrategy> winningStrategies) {
         this.winningStrategies = winningStrategies;
     }
-
+    public void displayBoard(){
+        board.display();
+    }
     public static  Builder getBuilder(){
         return new Builder();
     }
