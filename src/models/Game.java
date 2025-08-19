@@ -86,6 +86,59 @@ public class Game {
     public static  Builder getBuilder(){
         return new Builder();
     }
+    private boolean validateMove(Move move){
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
+
+        //if input is outside boundary
+        if(row <0 || row>= board.getSize() || col<0 || col>= board.getSize()){
+            return false;
+        }
+        return board.getGrid().get(row).get(col).getCellState().equals(CellState.EMPTY);
+    }
+    public void makeMove(){
+        Player currentPlayer = players.get(nextPlayerIdx);
+        System.out.println("It's "+currentPlayer.getName()+"'s turn" );
+
+        Move move = currentPlayer.makeMove(board);
+        if(!validateMove(move)){
+            System.out.println("Its not a valid move");
+            return;
+        }
+
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
+        Cell cellToChange = board.getGrid().get(row).get(col);
+        cellToChange.setSymbol(currentPlayer.getSymbol());
+        cellToChange.setCellState(CellState.FILLED);
+
+        move.setCell(cellToChange);
+        move.setPlayer(currentPlayer);
+
+        moves.add(move);
+        nextPlayerIdx = (nextPlayerIdx + 1)%players.size();
+
+        // we need to check if there is any state change in game due to this move
+        if(checkWinner(move)){
+            setWinner(currentPlayer);
+            setGameState(GameState.SUCCESS);
+
+        }else if(moves.size() == board.getSize() * board.getSize()){//won't work if some cells are not allowed to be played
+            setWinner(null);
+            setGameState(GameState.DRAW);
+            System.out.println("game is draw");
+        }
+    }
+
+    public boolean checkWinner(Move move){
+        for(WinningStrategy strategy: winningStrategies){
+            if(strategy.checkWinner(board , move)==true){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static class  Builder{
         private int  dimension;
         private List<Player> players;
