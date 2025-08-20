@@ -97,6 +97,7 @@ public class Game {
         return board.getGrid().get(row).get(col).getCellState().equals(CellState.EMPTY);
     }
     public void makeMove(){
+
         Player currentPlayer = players.get(nextPlayerIdx);
         System.out.println("It's "+currentPlayer.getName()+"'s turn" );
 
@@ -138,7 +139,24 @@ public class Game {
         }
         return false;
     }
-
+    public void undo(){
+        if(moves.size() ==0 ){
+            System.out.println("cant undo as no move has been played");
+            return;
+        }
+        Move lastmove = moves.get(moves.size()-1);
+        moves.remove(moves.size()-1);
+        lastmove.getCell().setCellState(CellState.EMPTY);
+        lastmove.getCell().setSymbol(null);
+        nextPlayerIdx--;
+        nextPlayerIdx = (nextPlayerIdx + players.size())%players.size();
+        setGameState(GameState.IN_PROGRESS);
+        setWinner(null);
+        for(WinningStrategy strategy: winningStrategies){
+            strategy.handleUndo(board , lastmove);
+        }
+        return;
+    }
     public static class  Builder{
         private int  dimension;
         private List<Player> players;

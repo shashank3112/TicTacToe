@@ -5,6 +5,7 @@ import strategies.RowWinningStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) {
@@ -23,6 +24,15 @@ public class Client {
         while(gc.checkState(game).equals(GameState.IN_PROGRESS)){
             gc.makeMove(game);
             gc.display(game);
+
+            System.out.println("Do you want to undo the move Y or N");
+            Scanner sc = new Scanner(System.in);
+            String undo = sc.nextLine();
+            if(undo.toLowerCase().equals("y")){
+                gc.undo(game);
+                System.out.println("Undo is successful");
+                gc.display(game);
+            }
         }
 
         if(gc.checkState(game).equals(GameState.SUCCESS)){
